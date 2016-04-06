@@ -1,0 +1,43 @@
+<html>
+<head>
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+</head>
+<body>
+	<form>
+		text : <input type="text" id="textbox" name="textdata" value="search here" list="namelist">
+		<input type="submit" id="submit_button" >
+		<datalist id="namelist">
+			<option value="buddhi">
+
+		</datalist>
+	</form>
+<script>
+var timer,value;
+	$('#textbox').bind('keyup',function(){
+		//console.log("chal chal");
+		clearTimeout(timer);
+		var str = $(this).val();
+		timer = setTimeout(function(){
+				//ajax call
+				$.ajax(
+				{
+					url :"getresult",
+					type : "POST",
+					data : {query:str,csrfmiddlewaretoken: '{{ csrf_token }}'},
+					success:function(json){
+						//console.log("chal gaya bhai");
+						var lis = json["result"];
+						console.log(lis);
+						$('#namelist').html("");
+						$.each(lis,function(index,value){
+							$('#namelist').append("<option value='"+value+"'>");
+						});
+					}
+				});
+
+		},400);
+	});
+</script>	
+</body>
+
+</html>
